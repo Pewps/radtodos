@@ -6,14 +6,14 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-const Note = ({ data }) => {
-
+const Note = ({ data, onDelete }) => {
+    const { date, note } = data;
     return (
         <View style={styles.note}>
-            <Text style={styles.noteText}>Date</Text>
-            <Text style={styles.noteText}>Note</Text>
+            <Text style={styles.noteText}>{date}</Text>
+            <Text style={styles.noteText}>{note}</Text>
 
-            <TouchableOpacity style={styles.noteDelete}>
+            <TouchableOpacity onPress={onDelete} style={styles.noteDelete}>
                 <Text style={styles.noteDeleteText}>X</Text>
             </TouchableOpacity>
         </View>

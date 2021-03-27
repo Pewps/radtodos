@@ -13,17 +13,40 @@ const Main = () => {
     const [notes, setNotes] = useState([]);
     const [inputVal, setInputVal] = useState('');
 
+    const addNote = useCallback(() => {
+        if (inputVal.length) {
+            const d = new Date();
+            const payload = {
+                date: `${d.getMonth()}/${d.getDate()}/${d.getFullYear()}`,
+                note: inputVal,
+            }
+            setNotes([payload, ...notes]);
+            setInputVal('');
+        }
+    }, [notes, inputVal]);
+
+    const onDelete = useCallback((i) => () => {
+        notes.splice(i, 1);
+        setNotes([...notes]);
+    }, [notes]);
+
+
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>- RAD To Do's -</Text>
             </View>
             <ScrollView style={styles.scrollContainer}>
-                {/* why is this just the closing? */}
-                <Note />
+                {notes.map((item, i) => (
+                    <Note key={i} data={item} onDelete={onDelete(i)} />
+                ))}
             </ScrollView>
             <View styles={styles.footer}>
                 <TextInput
+
+                    onChangeText={(userInput) => setInputVal(userInput)}
+                    value={inputVal}
                     style={styles.textInput}
                     placeholder="> add something rad..."
                     placeholderTextColor="#eee"
@@ -31,7 +54,7 @@ const Main = () => {
 
                 </TextInput>
             </View>
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity onPress={addNote} style={styles.addButton}>
                 <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
         </View>
